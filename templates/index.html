@@ -2,26 +2,120 @@
 <html>
 <head>
     <title>AI News Summarizer</title>
-</head>
-<body>
-    <h1>AI News Summarizer</h1>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6f9;
+        }
 
-    <form method="POST">
-        <input type="text" name="query" placeholder="Enter topic (e.g. AI startups)" required>
+        .container {
+            width: 60%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .search-box {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 70%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin-left: 10px;
+            border: none;
+            background: #4CAF50;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .news-card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .news-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .news-source {
+            color: gray;
+            font-size: 14px;
+        }
+
+        .summary-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        ul {
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>📰 AI News Summarizer</h1>
+
+    <form method="POST" class="search-box">
+        <input type="text" name="query" placeholder="e.g. Job Market in India" required>
         <button type="submit">Search</button>
     </form>
 
     {% if results %}
-        <h2>Relevant News</h2>
-        {% for r in results %}
-            <p>{{ r }}</p>
-            <hr>
+        <h2>📄 Relevant News</h2>
+
+        {% for article in results %}
+            <div class="news-card">
+                <div class="news-title">
+                    <a href="{{ article.link }}" target="_blank">
+                        {{ article.title }}
+                    </a>
+                </div>
+                <div class="news-source">
+                    Source: {{ article.source }}
+                </div>
+            </div>
         {% endfor %}
     {% endif %}
 
     {% if summary %}
-        <h2>Summary</h2>
-        <p>{{ summary }}</p>
+        <div class="summary-box">
+            <h2>✨ AI Summary</h2>
+
+            {% set lines = summary.split('\n') %}
+            <ul>
+                {% for line in lines %}
+                    {% if line.strip() %}
+                        <li>{{ line }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
     {% endif %}
+
+</div>
+
 </body>
 </html>

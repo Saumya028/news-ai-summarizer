@@ -18,14 +18,29 @@ def summarize(docs):
     text = "\n\n".join([d.page_content for d in docs])
 
     prompt = f"""
-Summarize the following news:
+You are a professional news analyst.
 
+Analyze the following news articles carefully and generate a high-quality summary.
+
+Instructions:
+- Remove duplicate or repetitive information
+- Focus on factual insights
+- Combine similar points
+- Keep it concise but informative
+
+Format:
+
+Key Points:
+- ...
+
+Trends:
+- ...
+
+Final Summary:
+...
+
+News:
 {text}
-
-Give:
-- Key Points
-- Trends
-- Final Summary
 """
 
     response = llm.invoke(prompt)

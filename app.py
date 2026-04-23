@@ -17,21 +17,20 @@ def home():
     if request.method == "POST":
         query = request.form.get("query")
 
-        # Step 1: Fetch news
+        # Fetch news
         articles = fetch_news(query)
 
-        # Step 2: Process
-        chunks = split_texts(articles)
+        # convert to text for vector DB
+        texts = [article["title"] for article in articles]
 
-        # Step 3: Vector DB
+        chunks = split_texts(texts)
+
         vector_db = create_db(chunks)
 
-        # Step 4: Search
         docs = search(vector_db, query)
 
-        results = [d.page_content for d in docs]
+        results = articles  # for UI
 
-        # Step 5: Summarize
         summary = summarize(docs)
 
     return render_template("index.html", results=results, summary=summary)
