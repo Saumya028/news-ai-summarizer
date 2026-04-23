@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI News Summarizer</title>
+</head>
+<body>
+    <h1>AI News Summarizer</h1>
+
+    <form method="POST">
+        <input type="text" name="query" placeholder="Enter topic (e.g. AI startups)" required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if results %}
+        <h2>Relevant News</h2>
+        {% for r in results %}
+            <p>{{ r }}</p>
+            <hr>
+        {% endfor %}
+    {% endif %}
+
+    {% if summary %}
+        <h2>Summary</h2>
+        <p>{{ summary }}</p>
+    {% endif %}
+</body>
+</html>
