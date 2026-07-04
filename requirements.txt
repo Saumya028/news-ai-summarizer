@@ -1,7 +1,11 @@
-flask
-langchain
-langchain-community
-langchain-openai
+Flask
+gunicorn
+requests
+beautifulsoup4
+lxml
+python-dotenv
+numpy
+pandas
 faiss-cpu
 sentence-transformers
-feedparser
+google-generativeai
