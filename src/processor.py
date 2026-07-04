@@ -1,13 +1,13 @@
-from langchain_text_splitters import CharacterTextSplitter
-
-def split_texts(texts):
-    splitter = CharacterTextSplitter(
-        chunk_size=500,
-        chunk_overlap=50
-    )
-
+def split_texts(texts, chunk_size=500, overlap=50):
     chunks = []
+
+    step = chunk_size - overlap
+
     for text in texts:
-        chunks.extend(splitter.split_text(text))
+        start = 0
+
+        while start < len(text):
+            chunks.append(text[start:start + chunk_size])
+            start += step
 
     return chunks

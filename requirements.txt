@@ -1,11 +1,9 @@
 Flask
 gunicorn
+feedparser
 requests
 beautifulsoup4
 lxml
 python-dotenv
-numpy
-pandas
-faiss-cpu
-sentence-transformers
-google-generativeai
+openai
+langchain-openai

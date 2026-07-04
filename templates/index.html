@@ -1,121 +1,248 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
     <title>AI News Summarizer</title>
+
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: "Segoe UI", sans-serif;
             background: #f4f6f9;
+            color: #333;
         }
 
         .container {
-            width: 60%;
-            margin: auto;
-            padding: 20px;
+            width: 75%;
+            max-width: 1000px;
+            margin: 40px auto;
         }
 
         h1 {
             text-align: center;
+            margin-bottom: 30px;
+            color: #222;
         }
 
         .search-box {
             display: flex;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         input {
-            width: 70%;
-            padding: 12px;
+            width: 75%;
+            padding: 14px;
             border-radius: 10px;
             border: 1px solid #ccc;
+            font-size: 16px;
         }
 
         button {
-            padding: 12px 20px;
+            padding: 14px 24px;
             margin-left: 10px;
             border: none;
             background: #4CAF50;
             color: white;
+            font-size: 15px;
             border-radius: 10px;
             cursor: pointer;
+            transition: .3s;
+        }
+
+        button:hover {
+            background: #388e3c;
+        }
+
+        h2 {
+            margin-bottom: 20px;
         }
 
         .news-card {
             background: white;
-            padding: 15px;
-            margin-bottom: 15px;
+            padding: 20px;
+            margin-bottom: 18px;
             border-radius: 12px;
-            box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.08);
+            transition: .3s;
         }
 
-        .news-title {
+        .news-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, .12);
+        }
+
+        .news-title a {
+            text-decoration: none;
+            color: #1565c0;
+            font-size: 20px;
             font-weight: bold;
-            font-size: 16px;
         }
 
-        .news-source {
-            color: gray;
+        .news-title a:hover {
+            text-decoration: underline;
+        }
+
+        .meta {
+            margin-top: 10px;
+            color: #666;
             font-size: 14px;
         }
 
+        .meta span {
+            margin-right: 20px;
+        }
+
+        .news-summary {
+            margin-top: 15px;
+            line-height: 1.7;
+            color: #444;
+            font-size: 15px;
+        }
+
+        .read-btn {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 10px 18px;
+            background: #1976d2;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: .3s;
+        }
+
+        .read-btn:hover {
+            background: #125aa2;
+        }
+
         .summary-box {
-            background: #e8f5e9;
-            padding: 20px;
+            margin-top: 40px;
+            background: white;
+            padding: 25px;
             border-radius: 12px;
-            margin-top: 20px;
+            box-shadow: 0px 3px 12px rgba(0, 0, 0, .08);
         }
 
-        ul {
-            margin-top: 10px;
+        .summary-box h2 {
+            color: #2e7d32;
+            margin-bottom: 20px;
         }
 
+        .summary-box ul {
+            padding-left: 20px;
+        }
+
+        .summary-box li {
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+
+        @media (max-width:768px) {
+
+            .container {
+                width: 95%;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            input {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            button {
+                margin-left: 0;
+            }
+
+        }
     </style>
+
 </head>
 
 <body>
 
-<div class="container">
-    <h1>📰 AI News Summarizer</h1>
+    <div class="container">
 
-    <form method="POST" class="search-box">
-        <input type="text" name="query" placeholder="e.g. Job Market in India" required>
-        <button type="submit">Search</button>
-    </form>
+        <h1>📰 AI News Summarizer</h1>
 
-    {% if results %}
-        <h2>📄 Relevant News</h2>
+        <form method="POST" class="search-box">
+            <input type="text" name="query"
+                placeholder="Search any topic... e.g. Artificial Intelligence, Indian Economy, Tesla" required>
+
+            <button type="submit">
+                Search
+            </button>
+        </form>
+
+        {% if results %}
+
+        <h2>📄 Latest News</h2>
 
         {% for article in results %}
-            <div class="news-card">
-                <div class="news-title">
-                    <a href="{{ article.link }}" target="_blank">
-                        {{ article.title }}
-                    </a>
-                </div>
-                <div class="news-source">
-                    Source: {{ article.source }}
-                </div>
-            </div>
-        {% endfor %}
-    {% endif %}
 
-    {% if summary %}
+        <div class="news-card">
+
+            <div class="news-title">
+                <a href="{{ article.link }}" target="_blank">
+                    {{ article.title }}
+                </a>
+            </div>
+
+            <div class="meta">
+                <span>📰 <strong>Source:</strong> {{ article.source }}</span>
+                <span>📅 <strong>Date:</strong> {{ article.published }}</span>
+            </div>
+
+            <div class="news-summary">
+                {{ article.summary }}
+            </div>
+
+            <a href="{{ article.link }}" target="_blank" class="read-btn">
+                Read Full Article →
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+        {% endif %}
+
+        {% if summary %}
+
         <div class="summary-box">
-            <h2>✨ AI Summary</h2>
+
+            <h2>🤖 AI Generated Summary</h2>
 
             {% set lines = summary.split('\n') %}
-            <ul>
-                {% for line in lines %}
-                    {% if line.strip() %}
-                        <li>{{ line }}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
 
-</div>
+            <ul>
+
+                {% for line in lines %}
+
+                {% if line.strip() %}
+
+                <li>{{ line }}</li>
+
+                {% endif %}
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        {% endif %}
+
+    </div>
 
 </body>
+
 </html>
