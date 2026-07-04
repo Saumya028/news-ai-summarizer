@@ -1,40 +1,49 @@
 from flask import Flask, render_template, request
 from src.news_fetcher import fetch_news
-from src.processor import split_texts
-from src.vector_store import create_db, search
 from src.summarizer import summarize
 
 app = Flask(__name__)
 
-vector_db = None
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-    global vector_db
     summary = None
     results = []
 
     if request.method == "POST":
-        query = request.form.get("query")
+        query = request.form.get("query", "").strip()
 
-        # Fetch news
-        articles = fetch_news(query)
+        if query:
+            # Fetch news articles
+            articles = fetch_news(query)
 
-        # convert to text for vector DB
-        texts = [article["title"] for article in articles]
+            results = articles
 
-        chunks = split_texts(texts)
+            # Prepare text for AI summarization
+            texts = []
 
-        vector_db = create_db(chunks)
+            for article in articles:
+                article_text = f"""
+Title: {article.get('title', '')}
+Source: {article.get('source', '')}
+Date: {article.get('published', '')}
+Summary: {article.get('summary', '')[:300]}
+Link: {article.get('link', '')}
+"""
+                texts.append(article_text)
 
-        docs = search(vector_db, query)
+            # Generate AI summary only if articles were found
+            if texts:
+                summary = summarize(texts)
+            else:
+                summary = "No news articles found for this topic."
 
-        results = articles  # for UI
-
-        summary = summarize(docs)
-
-    return render_template("index.html", results=results, summary=summary)
+    return render_template(
+        "index.html",
+        results=results,
+        summary=summary
+    )
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
